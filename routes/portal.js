@@ -144,7 +144,7 @@ module.exports = function(app, dir, RED, settings_nodered) {
                 });
             }
         });
-    } catche(e){}
+    } catch(e){}
 
     return true;
 }
