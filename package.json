@@ -18,6 +18,6 @@
     "file": "routes/red.js"
   }],
   "dependencies": {
-    "iwlist": "0.0.5"
+    "iwlist": "TheThingBox/iwlist#926c71a"
   }
 }
