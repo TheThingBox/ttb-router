@@ -82,67 +82,69 @@ module.exports = function(app, dir, RED, settings_nodered) {
     app.set('views', path.join(dir, 'views'));
     app.set('view engine', 'ejs');
 
-    iw.scan(function(err, networks){
-        if(err){
-            return;
-        }
+    try {
+        iw.scan(function(err, networks){
+            if(err){
+                return;
+            }
 
-        if(ifaces.hasOwnProperty("eth0")){
-            setAP(false);        
-        } else {
-            iw.associated(function(err, associated){
-                if(!associated){
-                    setAP(true);
-                    app.use("/portal", bodyParser.urlencoded({ extended: true }));
+            if(ifaces.hasOwnProperty("eth0")){
+                setAP(false);        
+            } else {
+                iw.associated(function(err, associated){
+                    if(!associated){
+                        setAP(true);
+                        app.use("/portal", bodyParser.urlencoded({ extended: true }));
 
-                    app.get("/portal",
-                        function(req, res) {
-                            res.header("Access-Control-Allow-Origin", "*");
-                            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                            iw.scan(function(err, networks){
-                                var wifilist;
-                                if(err){
-                                    wifilist = [];
-                                } else {
-                                    wifilist = networks.filter(function(e){
-                                        return (e.essid)?true:false;
-                                    });
-                                }
-
-                                res.render('portal', {
-                                    wifilist: {
-                                        secured: wifilist.filter(function(d){return d.encrypted}),
-                                        open: wifilist.filter(function(d){return !d.encrypted})
-                                    }
-                                });
-                            });
-                        }
-                    );
-
-                    app.post("/portal",
-                        function(req, res) {
-                            var data = req.body;
-                            console.log(typeof data, data)
-                            if(data.secured == "true" && data.password == ""){
-                                res.status(403).json({message: "Password should be filled", error: "no_password"})
-                            } else {
-                                setWiFi(data, function(err){
+                        app.get("/portal",
+                            function(req, res) {
+                                res.header("Access-Control-Allow-Origin", "*");
+                                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                iw.scan(function(err, networks){
+                                    var wifilist;
                                     if(err){
-                                        res.status(500).json({message:"Cannot set the Wifi", error: err}); 
+                                        wifilist = [];
                                     } else {
-                                        res.json({message:"The WiFi "+ data.ssid +" has been set.<br/>I will reboot in a few seconds.<br/>Please connect your computer/phone on this network.", hostname: os.hostname()});
-                                        setAP(false, function(){
-                                             setTimeout(reboot, 2000);
+                                        wifilist = networks.filter(function(e){
+                                            return (e.essid)?true:false;
                                         });
                                     }
+
+                                    res.render('portal', {
+                                        wifilist: {
+                                            secured: wifilist.filter(function(d){return d.encrypted}),
+                                            open: wifilist.filter(function(d){return !d.encrypted})
+                                        }
+                                    });
                                 });
                             }
-                        }
-                    );
-                }
-            });
-        }
-    });
+                        );
+
+                        app.post("/portal",
+                            function(req, res) {
+                                var data = req.body;
+                                console.log(typeof data, data)
+                                if(data.secured == "true" && data.password == ""){
+                                    res.status(403).json({message: "Password should be filled", error: "no_password"})
+                                } else {
+                                    setWiFi(data, function(err){
+                                        if(err){
+                                            res.status(500).json({message:"Cannot set the Wifi", error: err}); 
+                                        } else {
+                                            res.json({message:"The WiFi "+ data.ssid +" has been set.<br/>I will reboot in a few seconds.<br/>Please connect your computer/phone on this network.", hostname: os.hostname()});
+                                            setAP(false, function(){
+                                                 setTimeout(reboot, 2000);
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        );
+                    }
+                });
+            }
+        });
+    } catche(e){}
 
     return true;
 }
