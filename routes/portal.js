@@ -1,4 +1,8 @@
 module.exports = function(app, dir, RED, settings_nodered) {
+    var hasbin = require('hasbin')
+    if(hasbin.sync('iwlist') === false){
+        return false   
+    }
     var fs = require("fs");
     var path = require("path");
     var bodyParser = require('body-parser');
