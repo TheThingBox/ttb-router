@@ -18,6 +18,7 @@
     "file": "routes/red.js"
   }],
   "dependencies": {
-    "iwlist": "TheThingBox/iwlist#926c71a"
+    "iwlist": "TheThingBox/iwlist#926c71a",
+    "hasbin": "1.2.3"
   }
 }
