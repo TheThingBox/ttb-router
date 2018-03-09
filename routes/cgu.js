@@ -3,9 +3,13 @@ module.exports = function(app, dir, RED, settings_nodered) {
     var path = require("path");
     var bodyParser = require('body-parser');
     var express = require("express");
+        
+    if(fs.existsSync(path.join(dir, 'views', 'cgu.ejs')) === false){
+        return false
+    }
 
     function isCGUReaded() {
-        var sets = fs.readFileSync('/root/settings.json', 'utf8');
+        var sets = fs.readFileSync('/root/persistence/settings.json', 'utf8');
         try {
             sets = JSON.parse(sets);
         } catch (e) {};
