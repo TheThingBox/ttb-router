@@ -32,7 +32,7 @@ module.exports = function(app, dir, RED, settings_nodered) {
             req.path != settings_nodered.httpNodeRoot + "form/settings") {
             return next();
         } else {
-            if (isWelcomeEnable()) {
+            if (!isWelcomeEnable()) {
                 return next();
             } else {
                 res.redirect('/welcome');
@@ -42,7 +42,7 @@ module.exports = function(app, dir, RED, settings_nodered) {
 
     app.get("/welcome",
         function(req, res, next) {
-            if (isWelcomeEnable()) {
+            if (!isWelcomeEnable()) {
                 res.redirect("/")
             } else {
                 next();
