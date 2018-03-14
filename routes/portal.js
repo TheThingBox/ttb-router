@@ -97,7 +97,9 @@ module.exports = function(app, dir, RED, settings_nodered) {
             } else {
                 iw.associated(function(err, associated){
                     if(!associated){
-                        setAP(true);
+                        setAP(true, function(){
+                            setTimeout(setAP, 600000, false)
+                        });
                         app.use("/portal", bodyParser.urlencoded({ extended: true }));
 
                         app.get("/portal",
