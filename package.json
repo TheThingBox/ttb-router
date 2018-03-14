@@ -8,6 +8,9 @@
     "name": "portal",
     "file": "routes/portal.js"
   }, {
+    "name": "Welcome",
+    "file": "routes/welcome.js"
+  }, {
     "name": "CGU",
     "file": "routes/cgu.js"
   }, {
