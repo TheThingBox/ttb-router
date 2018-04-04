@@ -49,7 +49,15 @@ module.exports = function(app, dir, RED, settings_nodered) {
             }
         },
         function(req, res) {
-            res.render('welcome');
+            let dataPath = path.join(dir, 'views', 'welcome.json')
+            let data = {}
+            if(fs.existsSync(dataPath) === true){
+                data = fs.readFileSync(dataPath, 'utf8');
+                try {
+                    data = JSON.parse(data);
+                } catch (e) { data = {} };
+            }
+            res.render('welcome', data);
         }
     );
 
