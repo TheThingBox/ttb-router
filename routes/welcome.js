@@ -3,6 +3,8 @@ module.exports = function(app, dir, RED, settings_nodered) {
     var path = require("path");
     var bodyParser = require('body-parser');
     var express = require("express");
+    
+    let dataPath = path.join(dir, 'views', 'welcome.json')
         
     if(fs.existsSync(path.join(dir, 'views', 'welcome.ejs')) === false){
         return false
@@ -49,7 +51,6 @@ module.exports = function(app, dir, RED, settings_nodered) {
             }
         },
         function(req, res) {
-            let dataPath = path.join(dir, 'views', 'welcome.json')
             let data = {}
             if(fs.existsSync(dataPath) === true){
                 data = fs.readFileSync(dataPath, 'utf8');
